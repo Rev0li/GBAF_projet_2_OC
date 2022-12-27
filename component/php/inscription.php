@@ -13,8 +13,55 @@
         </head>
         <body>
         <div class="login-form">
+            <?php 
+                if(isset($_GET['reg_err']))
+                {
+                    $err = htmlspecialchars($_GET['reg_err']);
+
+                    switch($err)
+                    {
+                        case 'success':
+                            ?>
+                            <div class="alert alert-success">
+                                <strong>Bravô</strong> "Il est des nôtres!"
+                            </div>
+                            <?php
+                        break;
+
+                        case 'password':
+                            ?>
+                            <div class="alert alert-success">
+                                <strong>Erreur</strong> Tu sais pas recopier
+                            </div>
+                            <?php
+                        break;
+
+                        case 'email':
+                            ?>
+                            <div class="alert alert-success">
+                                <strong>Erreur</strong> Sur c'est celle la
+                            </div>
+                            <?php
+                        break;
+
+                        case 'already':
+                            ?>
+                            <div class="alert alert-success">
+                                <strong>Erreur</strong> compte deja existant
+                            </div>
+                            <?php
+                        break;
+                    }
+                }
+            ?>
             <form action="inscription_traitement.php" method="post">
                 <h2 class="text-center">Inscription</h2>       
+                <div class="form-group">
+                    <input type="text" name="nom" class="form-control" placeholder="Nom" required="required" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="prenom" class="form-control" placeholder="Prénom" required="required" autocomplete="off">
+                </div>
                 <div class="form-group">
                     <input type="text" name="pseudo" class="form-control" placeholder="Pseudo" required="required" autocomplete="off">
                 </div>
@@ -26,6 +73,12 @@
                 </div>
                 <div class="form-group">
                     <input type="password" name="password_retype" class="form-control" placeholder="Re-tapez le mot de passe" required="required" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="secret_quest" class="form-control" placeholder="Question secrète" required="required" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="secret_answer" class="form-control" placeholder="Réponse secrète" required="required" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">Inscription</button>

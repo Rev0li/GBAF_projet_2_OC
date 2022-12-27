@@ -1,13 +1,13 @@
 <?php
     session_start();
-    require_once 'config.php';
+    require_once ('/xampp/htdocs/Extranet/component/php/config.php');
     
-    if (isset($_POST['username']) && isset($_POST['password'])) 
+    if (isset($_POST['pseudo']) && isset($_POST['password'])) 
     {
-        $username = htmlspecialchars($_POST['username']);
+        $username = htmlspecialchars($_POST['pseudo']);
         $password = htmlspecialchars($_POST['password']);
 
-        $check = $bdd->prepare('SELECT username, email, password FROM utilisateurs WHERE username = ?');
+        $check = $bdd->prepare('SELECT pseudo, email, password FROM utilisateurs WHERE username = ?');
         $check->execute(array($username));
         $data = $check->fetch();
         $row = $check->rowCount();

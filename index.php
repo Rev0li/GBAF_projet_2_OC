@@ -4,13 +4,36 @@ require 'C:/xampp/htdocs/Extranet/component/php/config.php  ';
 require_once '/xampp/htdocs/Extranet/component/php/header.php';
 @$username = ($_POST['username']);
 @$password = ($_POST['password']);
-@$submit = ($_POST['submit']);
-$erreur_empty="";
+$erreur_empty=[];
+$e =[];
 
-if(isset($submit)){
-        if(empty($username)) $erreur_empty="<li>Veuillez remplir Pseudo</li>";
-        if(empty($password)) $erreur_empty.="<li>Veuillez remplir password</li>";
+if(isset($_POST['submit'])){
+        if(empty($username)) $erreur_empty[]="Veuillez remplir Pseudo";
+        if(empty($password)) $erreur_empty[]="Veuillez remplir password";
+
+        // Nettoyer les entrées de formulaire
+        $username = htmlspecialchars(trim($username));
+        $password = htmlspecialchars(trim($password));
+        
+
+        $recupUser = $bdd->prepare("SELECT * FROM utilisateurs WHERE username = ?");
+        $recupUser->execute(array($username));
+
+        if($recupUser->rowCount() > 0){
+                $data = $recupUser->fetch();
+                
+                $hashedPassword = $data['password'];
+                if (password_verify($password, $hashedPassword)){
+                        $_SESSION['username'] = $username;
+                        header ("Location: ./component/php/home.php" );
+                }else{
+                        $erreur_empty[]="Mot de passe incorrect";
+                }
+        }                
+        
 }
+//Je n'arrive pas a bien afficher les erreur au bon moment et a voir pk, et j'aimerai si l'utilisateur rentre des faut Id
+// annoncer : pseudo mal taper ou vous n'etes pas inscrit
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +54,13 @@ if(isset($submit)){
                 <!-- component/php/connexion.php -->
                 <form action="" method="post">
                         <h2 class="text-center">Connexion</h2>
-                        <div class="empty_err"><?php echo $erreur_empty  ?></div>
+                        <div class="empty_err">
+                <ul>
+                        <?php foreach($erreur_empty as $e): ?>
+                        <li><?= $e ; ?></li><br> 
+                        <?php endforeach;?>
+                </ul>
+                        </div>
                         <div class="form-group">
                                 <input 
                                 type="text" 
@@ -39,7 +68,7 @@ if(isset($submit)){
                                 class="form-controle" 
                                 placeholder="Pseudo"  
                                 autocomplete="off"  
-                                value="<?php echo $username; ?>"
+                                value="<?= $username; ?>"
                                 >
                         </div>
 
@@ -58,7 +87,8 @@ if(isset($submit)){
                                 type="submit" 
                                 name="submit" 
                                 class="btn btn-primary btn-block"
-                                >Connexion
+                                >
+                        Connexion
                         </button>
                         </div>
                 </form>

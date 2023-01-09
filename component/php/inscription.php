@@ -1,39 +1,91 @@
 <?php
 session_start();
 require_once '/xampp/htdocs/Extranet/component/php/header.php';
-@$nom = htmlspecialchars($_POST['nom']);
-@$prenom = htmlspecialchars($_POST['prenom']);
-@$username = htmlspecialchars($_POST['username']);
+require_once 'config.php';
+
+
+@$nom = htmlspecialchars($_POST['nom']) ;
+@$prenom = htmlspecialchars($_POST['prenom']) ;
+@$username = htmlspecialchars($_POST['username']) ;
 @$email = htmlspecialchars($_POST['email']);
 @$password = htmlspecialchars($_POST['password']);
-$password_retype = htmlspecialchars($_POST['password_retype']);
-
+@$password_retype = htmlspecialchars($_POST['password_retype']);
 @$secret_quest = htmlspecialchars($_POST['secret_quest']);
 @$secret_answer = htmlspecialchars($_POST['secret_answer']);
 
-@$_SESSION['nom'] = $nom;
-@$_SESSION['prenom'] = $prenom;
-@$_SESSION['username'] = $username;
-@$_SESSION['email'] = $email;
-@$_SESSION['secret_quest'] = $secret_quest;
-@$_SESSION['secret_answer'] = $secret_answer;
+$erreur_empty= [];
+$e = [];
 
-@$inscr=$_POST['inscr'];
-$erreur_empty="";
 
-if(isset($inscr)){
-    if(empty($nom)) $erreur_empty="<li>Veuillez remplir Nom</li>";
-    if(empty($prenom)) $erreur_empty.="<li>Veuillez remplir Prenom</li>";
-    if(empty($username)) $erreur_empty.="<li>Veuillez remplir Pseudo</li>";
-    if(empty($email)) $erreur_empty.="<li>Veuillez remplir email</li>";
-    if(empty($password)) $erreur_empty.="<li>Veuillez remplir password</li>";
-    if(empty($secret_quest)) $erreur_empty.="<li>Veuillez remplir La question secrete</li>";
-    if(empty($secret_answer)) $erreur_empty.="<li>Veuillez remplir Reponse secrete</li>";
-    elseif($password!=$password_retype) $erreur_empty.="<li>Les mot de passe ne sont pas identique</li>";
-
-}
-
+if(!empty($_POST)){
+    if(empty($nom)) $erreur_empty[]="Veuillez remplir Nom";
+    if(empty($prenom)) $erreur_empty[]="Veuillez remplir Prenom";
+    if(empty($username)) $erreur_empty[]="Veuillez remplir Pseudo";
+    if(!preg_match("#^[a-zA-Z0-9À-ú\.:\!\?\&',\s-]{10,50}#",$email)) $erreur_empty[]="Veuillez remplir un email valide";      
+        //   if(filter_var($email, FILTER_VALIDATE_EMAIL)) {}
+    if(empty($password)) $erreur_empty[]="Veuillez remplir password";
+    if(empty($secret_quest)) $erreur_empty[]="Veuillez remplir La question secrete";
+    if(empty($secret_answer)) $erreur_empty[]="Veuillez remplir Reponse secrete";
+    if($password!=$password_retype) $erreur_empty[]="Les mot de passe ne sont pas identique";
+    
+    
+    
+    if(count($erreur_empty) > 0 ){
+        
+    $nom = trim($nom);
+    $prenom = trim($prenom);
+    $username = trim($username);
+    $email = trim($email);
+    $password = trim($password);
+    $password_retype = trim($password_retype);
+    $secret_quest = trim($secret_quest);
+    // Prevoir une liste de question 
+    $secret_answer = trim($secret_answer);
+    // prevoir hash answer 
+    }else{
+        $check = $bdd->prepare('SELECT username, email FROM utilisateurs WHERE username = ? OR email = ?');
+        $check->execute(array($username, $email));
+        
+        if($check->rowCount()==0){
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $insert = $bdd->prepare('INSERT INTO utilisateurs(nom, prenom, username, email, password, secret_quest, secret_answer) VALUES (:nom, :prenom, :username, :email, :password, :secret_quest, :secret_answer)');
+        if($insert->execute(array('nom' => $nom,'prenom' => $prenom,'username' => $username,'email' => $email,'password' => $password,'secret_quest' => $secret_quest,'secret_answer' => $secret_answer,
+            ))){
+                
+                    // Insertion réussie
+                    if ($insert->rowCount() > 0) {
+                        // L'insertion a été effectuée
+                        // Afficher le message de confirmation et le compte à rebours avant la redirection
+                        
+                        $erreur_empty[] = '<p>Inscription réussie, vous allez être redirigé vers la page de connexion dans <span id="countdown">5</span> secondes.</p>'
+                        ?><script>
+                            // Définir le nombre de secondes avant la redirection
+                            var seconds = 5;
+                            // Mettre à jour le compte à rebours toutes les secondes
+                            setInterval(function() {
+                                // Decrementer le nombre de secondes
+                                seconds--;
+                                // Afficher le compte à rebours
+                                document.getElementById("countdown").innerHTML = seconds;
+                                // Rediriger l'utilisateur si le compte à rebours atteint 0
+                                if (seconds == 0) {
+                                    window.location = "../../index.php";
+                                }
+                            }, 1000);
+                        </script>
+                        <?php
+            }else{
+                die(var_dump($insert->errorInfo()));
+            }
+        // header('Location: inscription.php?=success');
+        }else{
+            $erreur_empty[]="e-mail deja utilise";
+        }
+    }
+}}
 ?>
+
+
 
 <!DOCTYPE html>
     <html lang="fr">
@@ -49,11 +101,17 @@ if(isset($inscr)){
         </head>
         <body>
         <div class="login-form">
-        <!-- inscription_traitement.php -->
             <form action="" method="post">
                 <h2 class="text-center">Inscription</h2>     
                 
-                <div class="empty_err"><?php echo $erreur_empty  ?></div>
+                <div class="empty_err">
+                    <ul>
+                        <!-- inverser e et $erreur_empty -->
+                        <?php foreach($erreur_empty as $e): ?>
+                            <li><?= $e ; ?></li>
+                            <?php endforeach;?>
+                    </ul>
+                        </div>
                 <div class="form-group">
                     <input 
                     type="text" 
@@ -61,7 +119,7 @@ if(isset($inscr)){
                     class="form-control" 
                     placeholder="Nom"  
                     autocomplete="off" 
-                    value="<?php if (isset($_SESSION['nom'])) echo $_SESSION['nom']; ?>"
+                    value="<?= $nom; ?>"
                     >
                 </div>
 
@@ -73,7 +131,7 @@ if(isset($inscr)){
                     class="form-control" 
                     placeholder="Prénom"  
                     autocomplete="off" 
-                    value="<?php if (isset($_SESSION['prenom'])) echo $_SESSION['prenom']; ?>"
+                    value="<?= $prenom; ?>"
                     >
                 </div>
 
@@ -85,7 +143,7 @@ if(isset($inscr)){
                     class="form-control" 
                     placeholder="Pseudo"  
                     autocomplete="off"
-                    value="<?php if (isset($_SESSION['username'])) echo $_SESSION['username']; ?>"
+                    value="<?= $username; ?>"
                     >
                 </div>
                 
@@ -97,7 +155,7 @@ if(isset($inscr)){
                     class="form-control" 
                     placeholder="Email"  
                     autocomplete="off"
-                    value="<?php if (isset($_SESSION['email'])) echo $_SESSION['email']; ?>"
+                    value="<?= $email; ?>"
                     >
                 </div>
                 <php  
@@ -136,7 +194,7 @@ if(isset($inscr)){
                     class="form-control" 
                     placeholder="Question secrète"  
                     autocomplete="off"
-                    value="<?php if (isset($_SESSION['secret_quest'])) echo $_SESSION['secret_quest']; ?>"
+                    value="<?= $secret_quest; ?>"
                     >
                 </div>
                 <php  
@@ -149,7 +207,7 @@ if(isset($inscr)){
                     name="secret_answer" class="form-control" 
                     placeholder="Réponse secrète"  
                     autocomplete="off"
-                    value="<?php if (isset($_SESSION['secret_answer'])) echo $_SESSION['secret_answer']; ?>"
+                    value="<?= $secret_answer; ?>"
                     >
                 </div>
                 <php  

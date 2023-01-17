@@ -1,5 +1,9 @@
-    </body>
+    <!-- </body> -->
+    <?php 
+    
+    require 'C:/xampp/htdocs/Extranet/component/php/config.php  ';
 
+    ?>
     <footer class="text-center" style="background-color: #dcdcdc">
     <div class="container">
         <section class="mt-5">
@@ -18,11 +22,13 @@
 
 
             <!-- creer une condition pour l'afficher si on est connecter -->
+            <?php if(isset($_SESSION['id'])){ ?>
             <div class="col-md-3">
             <h6 class="text-uppercase font-weight-bold">
             <button onclick="window.location.href='deconnexion.php'" type="button" class="btn btn-outline-danger btn-rounded" data-mdb-ripple-color="dark"> Deconnexion</button>
             </h6>
             </div>
+            <?php }?>
 
         </section>
 

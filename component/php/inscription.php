@@ -11,14 +11,9 @@ require_once 'config.php';
 @$password_retype = htmlspecialchars($_POST['password_retype']);
 @$secret_quest = htmlspecialchars($_POST['secret_quest']);
 
-@$secret_quest_options = array("Quel est le nom de famille de votre professeur d'enfance préféré ?", "Dans quelle ville se sont rencontrés vos parents?", "Quel serez votre poid ou taille idéal  ?");
-//BDD array [id]
-
 @$secret_answer = htmlspecialchars($_POST['secret_answer']);
-
 $erreur_empty = [];
 $e = [];
-
 
 if (!empty($_POST)) {
     if (empty($nom)) $erreur_empty[] = "Veuillez remplir Nom";
@@ -27,8 +22,6 @@ if (!empty($_POST)) {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erreur_empty[] = "Veuillez remplir un email valide";
     if (empty($password)) $erreur_empty[] = "Veuillez remplir password";
     if (empty($secret_quest)) $erreur_empty[] = "Veuillez sélectionner une question secrète";
-    // if (empty($secret_quest) || !in_array($secret_quest, $secret_quest_options)) $erreur_empty[] = "Veuillez sélectionner une question secrète";
-    //pourquoi ci dessus "tuto" ne marche pas?
     if (empty($secret_answer)) $erreur_empty[] = "Veuillez selsectionner une Reponse secrete";
     if ($password != $password_retype) $erreur_empty[] = "Les mot de passe ne sont pas identique";
 
@@ -45,8 +38,7 @@ if (!empty($_POST)) {
 
         if ($check->rowCount() == 0) {
             $password = password_hash($password, PASSWORD_DEFAULT);
-            $secret_answer = password_hash($secret_answer, PASSWORD_DEFAULT); //redondent
-            //password_default ?
+            $secret_answer = password_hash($secret_answer, PASSWORD_DEFAULT);
             $insert = $bdd->prepare('INSERT INTO utilisateurs(nom, prenom, username, email, password, secret_quest, secret_answer) VALUES (:nom, :prenom, :username, :email, :password, :secret_quest, :secret_answer)');
             if ($insert->execute(array('nom' => $nom, 'prenom' => $prenom, 'username' => $username, 'email' => $email, 'password' => $password, 'secret_quest' => $secret_quest, 'secret_answer' => $secret_answer))) {
                 // Insertion réussie
@@ -93,6 +85,7 @@ if (!empty($_POST)) {
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="../css/style.css" rel="stylesheet" media="all"> 
 
     <title>Inscription</title>
 </head>
@@ -141,9 +134,13 @@ if (!empty($_POST)) {
                 <label for="secret_quest">Question secrète</label>
                 <select name="secret_quest" class="form-control" id="secret_quest">
                     <option value="" disabled selected>Sélectionnez votre question secrète</option>
-                    <option value="Nom de votre animal de compagnie ?">Nom de votre animal de compagnie ?</option>
-                    <option value="Nom de votre mère ?">Nom de votre mère ?</option>
-                    <option value="Ville de naissance ?">Ville de naissance ?</option>
+                    <?php
+                    $options = $bdd->query("SELECT * FROM quest_option");
+                    while ($row = $options->fetch()) {
+                        // valeur a transmettre Bdd utilisateur "secret_quest"    Valeur a afficher dans le formulaire
+                        echo "<option value='" . $row['secret_quest_id'] . "'>" . $row['secret_quest_value'] . "</option>";
+                    }
+                    ?>
                 </select>
             </div>
 
@@ -160,34 +157,7 @@ if (!empty($_POST)) {
     </div>
 
 
-    <style>
-        .login-form {
-            width: 340px;
-            margin: 50px auto;
-        }
 
-        .login-form form {
-            margin-bottom: 15px;
-            background: #f7f7f7;
-            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-        }
-
-        .login-form h2 {
-            margin: 0 0 15px;
-        }
-
-        .form-control,
-        .btn {
-            min-height: 38px;
-            border-radius: 2px;
-        }
-
-        .btn {
-            font-size: 15px;
-            font-weight: bold;
-        }
-    </style>
 </body>
 <?php require_once '/xampp/htdocs/Extranet/component/php/footer.php'; ?>
 

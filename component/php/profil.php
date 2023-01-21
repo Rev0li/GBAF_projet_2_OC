@@ -8,8 +8,6 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
-@$secret_quest_options = array("Quel est le nom de votre première école?", "Quel est le nom de votre animal de compagnie?", "Quel est le nom de votre mère?");
-
 
 // Declaration tableau vide des erreurs
 $err_nom = [];
@@ -22,43 +20,43 @@ if (isset($_POST['modif'])) {
     $prenom = htmlspecialchars($prenom);
     $username = htmlspecialchars($username);
     $email = htmlspecialchars($email);
-    $secret_answer = htmlspecialchars($secret_answer);
-
 
     if (empty($nom))          $nom = $_SESSION['nom'];
     if (empty($prenom))       $prenom = $_SESSION['prenom'];
     if (empty($username))     $username = $_SESSION['username'];
     if (empty($email))        $email = $_SESSION['email'];
-    if (empty($secret_quest)) $secret_quest = $_SESSION['secret_quest'];
-    if (empty($secret_answer)) $secret_answer = $_SESSION['secret_answer'];
+        
 
-    if ($nom != $_SESSION['nom'] || $prenom != $_SESSION['prenom'] || $username != $_SESSION['username'] || $email != $_SESSION['email'] || $secret_quest != $_SESSION['secret_quest'] || $secret_answer != $_SESSION['secret_answer']) {
+    //for all but not password
+    if ($nom != $_SESSION['nom'] || $prenom != $_SESSION['prenom'] || $username != $_SESSION['username'] || $email != $_SESSION['email'] ) {
         $req = $bdd->prepare('UPDATE utilisateurs SET 
             nom=?,
             prenom=?,
             username=?,
             email=?,
-            secret_quest=?,
-            secret_answer=?
+            -- secret_quest=?,
+            -- secret_answer=?
             WHERE id = ?');
-
-        $req->execute([$nom, $prenom, $username, $email, $secret_quest, $secret_answer, $_SESSION['id']]);
+            
+        $secret_answer = password_hash($secret_answer, PASSWORD_DEFAULT);
+        $req->execute([$nom, $prenom, $username, $email, $secret_quest, $secret_answer, $_SESSION['z']]);
 
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
         $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
-        $_SESSION['secret_quest'] = $secret_quest;
-        $_SESSION['secret_answer'] = $secret_answer;
+        // $_SESSION['secret_quest'] = $secret_quest;
+        // $_SESSION['secret_answer'] = $secret_answer;
 
         $err_nom[] = "Votre profil à été modifier";
     } else {
         // les champs n'ont pas été modifié 
         $err_nom[] = "Aucune modification effectuée";
     }
-} elseif (isset($_POST['modif_pict'])) {
+}
 
-    //Image de profil
+//profil_picture
+if (isset($_POST['modif_pict'])) {
     if (isset($_FILES['profil_pict']) and (!empty($_FILES['profil_pict']['name']))) {
         $taillemax = 5242880; //5mo
         $extensionsValides = array('jpg', 'jpeg');
@@ -113,6 +111,29 @@ if (isset($_POST['modif'])) {
     }
 }
 
+//password
+if (isset($_POST['modif_psw'])) {
+    if (isset($_POST['old_password'], $_POST['new_password'], $_POST['password_retype']) and !empty($_POST['old_password']) and !empty($_POST['new_password']) and !empty($_POST['password_retype'])) {
+        $recup_pass = $bdd->prepare("SELECT password FROM utilisateurs WHERE username = ?");
+        $recup_pass->execute(array($username));
+        $password_hash = $recup_pass->fetchColumn();
+        if(password_verify($_POST['old_password'],$password_hash)){
+            if ($_POST['new_password'] == $_POST['password_retype']) {
+                $new_password = $_POST['new_password'];
+                $new_password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                $update = $bdd->prepare('UPDATE utilisateurs SET password = :new_password_hash WHERE username = :username');
+                $update->execute(array('new_password_hash' => $new_password_hash, 'username' => $username));
+                $err_nom[] = "Nouveau mot de passe mis a jour ";
+            }else{
+                $err_nom[] = "Nouveau mot de passe mal recopier ";
+            }
+        }else{
+            $err_nom[] = "Ancien mot de passe incorrect";
+        }
+    }else{
+        $err_nom[] = "Veuillez remplir tout les champs mot de passe";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -123,6 +144,7 @@ if (isset($_POST['modif'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="../css/style.css" rel="stylesheet" media="all"> 
     <title>Mon profil</title>
     <?php require_once '/xampp/htdocs/Extranet/component/php/header.php'; ?>
 </head>
@@ -133,8 +155,9 @@ if (isset($_POST['modif'])) {
             <h2 class="text-center">Mes Informations</h2>
             <div>
                 <label for="image">Image de profil :</label><br>
-                <input type="file" name="profil_pict"><br>
                 <img id="preview" src="<?= '../../component/image/profil_pict' . '/' . $_SESSION['id'] . '/' . $_SESSION['profil_pict'] ?>" alt="">
+                <br/>
+                <input type="file" name="profil_pict"><br>
             </div><br>
             <div class="form-group">
                 <button type="submit" name="modif_pict" class="btn btn-primary btn-block">Maj photo profil</button>
@@ -147,104 +170,40 @@ if (isset($_POST['modif'])) {
                     <?php endforeach; ?>
                 </ul>
             </div>
+
             <div class="form-group">
                 <input type="text" name="nom" class="form-control" placeholder="Nom" autocomplete="off" value="<?= $_SESSION['nom']; ?>">
             </div>
-
-
             <div class="form-group">
                 <input type="text" name="prenom" class="form-control" placeholder="Prénom" autocomplete="off" value="<?= $_SESSION['prenom']; ?>">
             </div>
-
-
             <div class="form-group">
                 <input type="text" name="username" class="form-control" placeholder="Pseudo" autocomplete="off" value="<?= $_SESSION['username']; ?>">
             </div>
-
-
             <div class="form-group">
                 <input type="email" name="email" class="form-control" placeholder="Email" autocomplete="off" value="<?= $_SESSION['email']; ?>">
             </div>
-
+            <div class="form-group">
+                <button type="submit" name="modif" class="btn btn-primary btn-block">Modifier vos Informations</button>
+            </div>
 
 
             <div class="form-group">
                 <input type="password" name="old_password" class="form-control" placeholder="Mot de passe actuel" autocomplete="off">
             </div>
-
             <div class="form-group">
                 <input type="password" name="new_password" class="form-control" placeholder="Nouveau mot de passe" autocomplete="off">
             </div>
-
-
             <div class="form-group">
                 <input type="password" name="password_retype" class="form-control" placeholder="Confirmer le mot de passe" autocomplete="off">
             </div>
-
-
             <div class="form-group">
-                <label for="secret_quest">Question secrète</label>
-                <select name="secret_quest" class="form-control" id="secret_quest">
-                    <option value="" disabled selected>Sélectionnez votre question secrète</option>
-                    <option value="Nom de votre animal de compagnie ?">Nom de votre animal de compagnie ?</option>
-                    <option value="Nom de votre mère ?">Nom de votre mère ?</option>
-                    <option value="Ville de naissance ?">Ville de naissance ?</option>
-                </select>
+                <button type="submit" name="modif_psw" class="btn btn-primary btn-block">Mettre a jour le mot de passe</button>
             </div>
-
-
-            <div class="form-group">
-                <input type="text" name="secret_answer" class="form-control" placeholder="Réponse secrète" autocomplete="off" value="<?= $_SESSION["secret_answer"]; ?>">
-            </div>
-
-
-            <div class="form-group">
-                <button type="submit" name="modif" class="btn btn-primary btn-block">Enregistrer modification</button>
-            </div>
-
 
         </form>
     </div>
-
-
 </body>
-
-
-
-<style>
-    .login-form {
-        width: 340px;
-        margin: 50px auto;
-    }
-
-    .login-form form {
-        margin-bottom: 15px;
-        background: #f7f7f7;
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        padding: 30px;
-    }
-
-    .login-form h2 {
-        margin: 0 0 15px;
-    }
-
-    .form-control,
-    .btn {
-        min-height: 38px;
-        border-radius: 2px;
-    }
-
-    .btn {
-        font-size: 15px;
-        font-weight: bold;
-    }
-
-    #preview {
-        position: relative;
-        max-width: 200px;
-        max-height: 200px;
-    }
-</style>
 <?php
 require_once '/xampp/htdocs/Extranet/component/php/footer.php';
 ?>

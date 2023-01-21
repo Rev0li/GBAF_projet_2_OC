@@ -1,22 +1,99 @@
 
+
+
+
+/* header */
+.hdmid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .hdrght {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+} */
+
+.logo {
+    max-width: 90px;
+}
+
+.Hpad {
+    background-color: #dcdcdc;
+    padding: 10px 0px 10px 0px;
+}
+
+#preview_h {
+    position: relative;
+    max-height: 70px;
+    border-radius: 50%;
+}
+
+
+/* ____________________ */
+
+
+/* Update_profile AND Index */
 .login-form {
     width: 340px;
     margin: 50px auto;
 }
+
 .login-form form {
     margin-bottom: 15px;
     background: #f7f7f7;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     padding: 30px;
 }
+
 .login-form h2 {
     margin: 0 0 15px;
 }
-.form-control, .btn {
+
+.form-control,
+.btn {
     min-height: 38px;
     border-radius: 2px;
 }
-.btn {        
+
+.btn {
     font-size: 15px;
     font-weight: bold;
 }
+
+#preview {
+    position: relative;
+    max-width: 200px;
+    max-height: 200px;
+}
+
+#panneau-depliant{
+    cursor: pointer;
+    }
+/* ____________________ */
+
+/* Home */
+.truncate{
+    overflow:hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.minia{
+    max-height: 100px;
+}
+.imghero{
+
+    width: 100%;
+}
+.contn_hero{
+    max-height: 50vh;
+    overflow: hidden;
+
+}
+
+/* ____________________ */
+
+

@@ -1,13 +1,27 @@
 <?php
 //i creat a fonction resize_image with 2 arguments, $fichier and $max_resolution
 function crop_image($file,$max_resolution){
-//if file exist {}
+    //if file exist {}
     if(file_exists($file)){
-        $original_image= imagecreatefromjpeg($file);
-
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if ($extension == "jpg" || $extension == "jpeg") {
+            $original_image = imagecreatefromjpeg($file);
+        } else if ($extension == "png") {
+            $original_image = imagecreatefrompng($file);
+        } else if ($extension == "gif") {
+            $original_image = imagecreatefromgif($file);
+        } else {
+            echo "Invalid file format";
+            return;
+        }
         //check original size image
         $original_width= imagesx($original_image);
         $original_height= imagesy($original_image);
+        
+        if($original_height == 0 || $original_width == 0) {
+            echo "Invalid image dimensions";
+            return;
+        }
         
         //here is diffrent "resize" image, because 300px is a minimum for after done 300*300
         //in resize_image 300px is a maximum 
@@ -41,6 +55,9 @@ function crop_image($file,$max_resolution){
             imagecopyresampled($new_crop_image,$new_image, 0, 0, $x, $y, $max_resolution, $max_resolution, $max_resolution, $max_resolution);
 
             imagejpeg($new_crop_image,$file,90);
+            imagedestroy($original_image);
+            imagedestroy($new_image);
+            imagedestroy($new_crop_image);
         }
     }
 

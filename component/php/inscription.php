@@ -20,7 +20,13 @@ if (!empty($_POST)) {
     if (empty($prenom)) $erreur_empty[] = "Veuillez remplir Prenom";
     if (empty($username)) $erreur_empty[] = "Veuillez remplir Pseudo";
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $erreur_empty[] = "Veuillez remplir un email valide";
-    if (empty($password)) $erreur_empty[] = "Veuillez remplir password";
+    if (empty($password)) {
+        $erreur_empty[] = "Veuillez remplir le champ password";
+    } else {
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
+            $erreur_empty[] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial";
+        }
+    }
     if (empty($secret_quest)) $erreur_empty[] = "Veuillez sélectionner une question secrète";
     if (empty($secret_answer)) $erreur_empty[] = "Veuillez selsectionner une Reponse secrete";
     if ($password != $password_retype) $erreur_empty[] = "Les mot de passe ne sont pas identique";
@@ -41,14 +47,26 @@ if (!empty($_POST)) {
             $secret_answer = password_hash($secret_answer, PASSWORD_DEFAULT);
             $insert = $bdd->prepare('INSERT INTO utilisateurs(nom, prenom, username, email, password, secret_quest, secret_answer) VALUES (:nom, :prenom, :username, :email, :password, :secret_quest, :secret_answer)');
             if ($insert->execute(array('nom' => $nom, 'prenom' => $prenom, 'username' => $username, 'email' => $email, 'password' => $password, 'secret_quest' => $secret_quest, 'secret_answer' => $secret_answer))) {
-                // Insertion réussie
-                if ($insert->rowCount() > 0) {
-                    // L'insertion a été effectuée
-                    // Afficher le message de confirmation et le compte à rebours avant la redirection
+                // L'insertion a été effectuée
+                $rec_id = $bdd->prepare('SELECT id FROM utilisateurs WHERE username = ? OR email = ?');
+                $rec_id->execute(array($username, $email));
+                $user_id = $rec_id->fetch();
+                $pict_default = '../image/profil_pict/Default_pfp.png';
+                $dst_pd = '../image/profil_pict/' . $user_id['id'] . '/' . 'Default_pfp.png';
+
+                $dossier = '../image/profil_pict/' . $user_id['id'] . '/';
+
+                if (!is_dir($dossier)) {
+                    mkdir($dossier);
+                    if(copy($pict_default, $dst_pd)) {
+                        
+                    }
+                }
 
                     $erreur_empty[] = '<p>Inscription réussie, vous allez être redirigé vers la page de connexion dans <span id="countdown">5</span> secondes.</p>'
 ?>
                     <script>
+                        // Afficher le message de confirmation et le compte à rebours avant la redirection
                         // Définir le nombre de secondes avant la redirection
                         var seconds = 5;
                         // Mettre à jour le compte à rebours toutes les secondes
@@ -70,7 +88,7 @@ if (!empty($_POST)) {
             }
         }
     }
-}
+
 ?>
 
 

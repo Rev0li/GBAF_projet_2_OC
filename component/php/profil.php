@@ -59,7 +59,7 @@ if (isset($_POST['modif'])) {
 if (isset($_POST['modif_pict'])) {
     if (isset($_FILES['profil_pict']) and (!empty($_FILES['profil_pict']['name']))) {
         $taillemax = 5242880; //5mo
-        $extensionsValides = array('jpg', 'jpeg');
+        $extensionsValides = array('jpg', 'jpeg', 'png', 'gif');
 
         if ($_FILES['profil_pict']['size'] <= $taillemax) {
             $extensionUpload = strtolower(substr(strrchr($_FILES['profil_pict']['name'], '.'), 1));
@@ -87,14 +87,14 @@ if (isset($_POST['modif_pict'])) {
                 }
                 if ($resultat) {
                     if (is_readable($chemin)) {
-                        //j'aimerai comprendre
-                        // crop_image($pic_name,300);
+                        crop_image($chemin, 300);
                         $req = $bdd->prepare("UPDATE utilisateurs SET profil_pict = ? WHERE id = ?");
 
                         $req->execute([($pic_name), $_SESSION['id']]);
                         $err_nom[] = 'upload reussi';
                         $_SESSION['profil_pict'] = $pic_name;
                         // header('Location: home.php ');
+                        
 
                     } else {
                         $err_nom[] = "Impossible d'optimiser votre fichier";
@@ -146,8 +146,8 @@ if (isset($_POST['modif_psw'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link href="../css/style.css" rel="stylesheet" media="all"> 
     <title>Mon profil</title>
-    <?php require_once '/xampp/htdocs/Extranet/component/php/header.php'; ?>
 </head>
+<?php require_once '/xampp/htdocs/Extranet/component/php/header.php'; ?>
 
 <body>
     <div class="login-form">
@@ -157,7 +157,7 @@ if (isset($_POST['modif_psw'])) {
                 <label for="image">Image de profil :</label><br>
                 <img id="preview" src="<?= '../../component/image/profil_pict' . '/' . $_SESSION['id'] . '/' . $_SESSION['profil_pict'] ?>" alt="">
                 <br/>
-                <input type="file" name="profil_pict"><br>
+                <input type="file" name="profil_pict" value="Choisir un fichier">
             </div><br>
             <div class="form-group">
                 <button type="submit" name="modif_pict" class="btn btn-primary btn-block">Maj photo profil</button>

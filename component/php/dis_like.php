@@ -44,3 +44,4 @@ if (isset($_GET['t'], $_GET['id']) and !empty($_GET['t']) and !empty($_GET['id']
         header('Location: partner.php?id=' . $getid);
     }
 }
+?>

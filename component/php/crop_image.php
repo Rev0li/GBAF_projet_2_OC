@@ -62,4 +62,4 @@ function crop_image($file,$max_resolution){
     }
 
 }
-
+?>

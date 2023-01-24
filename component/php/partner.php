@@ -19,8 +19,6 @@ if (isset($_GET['id']) and !empty(['id'])) {
     $partner = $bdd->prepare('SELECT * FROM partner WHERE id = ?');
     $partner->execute(array($get_id));
 
-    //je ne peut pas poster 1 commentaire par personne mais 1 commentair en tout
-    //ajoute lheure du commentaire
     $verif_user = $bdd->prepare('SELECT COUNT(*) FROM commentaires WHERE user_id = ?');        
     $verif_user->execute(array($sessionid));
     $count = $verif_user->fetchColumn();
@@ -60,12 +58,10 @@ if (isset($_GET['id']) and !empty(['id'])) {
         $dislikes->execute(array($id));
         $dislikes = $dislikes->rowCount();
     } else {
-        // header('Location:home.php');
-        die("cet article n'existe pas");
+        header('Location:home.php');
     }
 } else {
-    // header('Location:home.php');
-    die("erreur");
+    header('Location:home.php');
 }
 
 ?>

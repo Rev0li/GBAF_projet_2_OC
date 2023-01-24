@@ -34,8 +34,6 @@ if (isset($_POST['modif'])) {
             prenom=?,
             username=?,
             email=?,
-            -- secret_quest=?,
-            -- secret_answer=?
             WHERE id = ?');
             
         $secret_answer = password_hash($secret_answer, PASSWORD_DEFAULT);
@@ -45,12 +43,9 @@ if (isset($_POST['modif'])) {
         $_SESSION['prenom'] = $prenom;
         $_SESSION['username'] = $username;
         $_SESSION['email'] = $email;
-        // $_SESSION['secret_quest'] = $secret_quest;
-        // $_SESSION['secret_answer'] = $secret_answer;
 
         $err_nom[] = "Votre profil à été modifier";
     } else {
-        // les champs n'ont pas été modifié 
         $err_nom[] = "Aucune modification effectuée";
     }
 }
@@ -76,12 +71,12 @@ if (isset($_POST['modif_pict'])) {
                 $chemin = $dossier . $pic_name;
 
                 $resultat = move_uploaded_file($_FILES['profil_pict']['tmp_name'], $chemin);
-                //ligne 84 a 90 on supprime l'ancienne image de profil
+                // on supprime l'ancienne image de profil
 
                 $current_picture = $bdd->prepare('SELECT profil_pict FROM utilisateurs WHERE id = ?');
                 $current_picture->execute(array($_SESSION['id']));
                 $current_picture = $current_picture->fetch();
-                //verifier quand c'est la 1er photo de profile
+
                 if (file_exists($dossier . $current_picture['profil_pict'])) {
                     unlink($dossier . $current_picture['profil_pict']);
                 }

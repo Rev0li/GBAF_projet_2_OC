@@ -108,7 +108,7 @@ elseif (isset($_POST["valide_new_mdp"])){
                         <div class="empty_err">
                                 <ul>
                                         <?php foreach ($erreur_empty as $e) : ?>
-                                                <li><?= $e; ?></li><br>
+                                                <li><?= $e; ?></li>
                                         <?php endforeach; ?>
                                 </ul>
                         </div>
@@ -133,7 +133,7 @@ elseif (isset($_POST["valide_new_mdp"])){
                                         <div class="empty_err">
                                                 <ul>
                                                         <?php foreach ($erreur_recup as $r) : ?>
-                                                                <li><?= $r; ?></li><br>
+                                                                <li><?= $r; ?></li>
                                                         <?php endforeach; ?>
                                                 </ul>
                                         </div>
@@ -164,7 +164,7 @@ elseif (isset($_POST["valide_new_mdp"])){
                                                 <li><?= $p; ?></li><br>
                                         <?php endforeach; ?>
                                 </ul>
-                        </div>
+                                </div>
                         <label for="password_reset">Enregistré votre nouveau Mot de passe</label>
                                 <div class="form-group">
                                         <input type="password" name="new_password" class="form-control" placeholder="Nouveau mot de passe" autocomplete="off">

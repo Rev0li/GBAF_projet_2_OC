@@ -149,6 +149,7 @@ font-size: medium;
 
 .cont_right{
     display: flex;
+    flex-wrap: wrap;
 }
 .new-com{
 margin:0 20px 0 20px;

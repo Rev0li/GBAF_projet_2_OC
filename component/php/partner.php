@@ -1,7 +1,12 @@
 <?php
 session_start();
-require_once 'C:/xampp/htdocs/Extranet/component/php/config.php  ';
-require_once '/xampp/htdocs/Extranet/component/php/header.php';
+require_once 'config.php  ';
+require_once 'header.php';
+
+if (empty($_SESSION['id'])) {
+    header('Location:../../index.php ');
+    exit;
+}
 
 $getid = (int) $_GET['id'];
 $sessionid = $_SESSION['id'];
@@ -73,26 +78,24 @@ if (isset($_GET['id']) and !empty(['id'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="http://localhost/extranet/component/css/style.css" rel="stylesheet" media="all"> 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
     <title><?= $titre ?></title>
 </head>
 
 <body>
-<div class="container text-center">
+<div class="container_flex_wrap">
     <div class="info">
         <img class="partner_logo rounded mt-4 mb-3" src="../image/miniature/<?= $get_id ?>.png">
         <h1><?= $titre ?></h1>
         <p><?= $contenu ?></p>
     </div>
     
-    <div class="cont-commentaire card shadow-sm mt-5">  
+    <div id="msform">  
     <div class="cont_likes_dislike">
             <h2 class="count_title"><?= $count_commentaire ?>  Commentaire</h2>
             
             <div class="cont_right">
-                <button id="btn-nouveau-commentaire" class="btn-primary rounded new_com">Nouveau commentaire</button>
+                <button class="btn new-com">Nouveau commentaire</button>
             
 
                 <div class="lk">
@@ -124,7 +127,7 @@ if (isset($_GET['id']) and !empty(['id'])) {
         
         <div class="count_com ">
         <?php while ($c = $commentaires->fetch()) { ?>
-            <div class="ind_com card mt-3 mb-3 me-3 ms-3 shadow-sm">
+            <div class="ind_com">
                 <?= $c['prenom'] ?><br>
                 le  <?= $c['post_date'] ?> <br>
                 <?= $c['commentaire'] ?> 
@@ -132,63 +135,29 @@ if (isset($_GET['id']) and !empty(['id'])) {
         <?php } ?> 
         </div>
 
-        <div class="form cont-post-com card mt-3 mb-3 me-3 ms-3 shadow-sm">
+        
             <?php if (isset($c_msg)) { ?>     <li> <?= $c_msg; ?></li>       <?php } ?>
             <form id="form-nouveau-commentaire" method="post">
-                <div class="com_name mt-3 mb-3">
+                <div class="com_name">
                     <input readonly="readonly" type="text" name="prenom" value="<?= $_SESSION['prenom'] ?>"> 
                 </div>
-                <div class="whrit_com mt-3 mb-3">
+                <div class="whrit_com">
                     <textarea class="area-com" name="commentaire" placeholder="Votre commentaire..."></textarea>
                 </div>
-                <div class="btn btn_com mt-3 mb-3">
-                    <input class="btn-primary rounded" type="submit" value="Poster mon commentaire" name="submit_commentaire">
+                <div >
+                    <button class="btn" type="submit"  name="submit_commentaire">Poster mon commentaire</button>
                 </div>
             </form>
-        </div>
+        
 
         
     </div>
 </div>
 </body>
-<?php require_once '/xampp/htdocs/Extranet/component/php/footer.php';
+<?php require_once 'footer.php';
 ?>
 <style>
-    /* Partner */
-    .partner_logo{
-    max-width: 90%;
-}
-
-.cont_likes_dislike {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 25px 0px 25px;
-    flex-flow: row wrap;
-}
-
-.cont_right{
-    display: flex;
-}
-.new_com{
-margin:0 20px 0 20px;
-}
-.lk, .dslk{
-    display: flex;
-}
-
-.img_pouce {
-    max-width: 50px;
-}
-.area-com{
-    width: 90%;
-    min-height: 15vh;
-}
-
-.cont-post-com, .ind_com {
-    background: #dcdcdc!important;
-}
-
-/* ____________________ */
+   
 </style>
 <script>
   const btn = document.getElementById("btn-nouveau-commentaire");

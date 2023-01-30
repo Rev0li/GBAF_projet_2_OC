@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '/xampp/htdocs/Extranet/component/php/header.php';
+require_once 'header.php';
 require_once 'config.php';
 
 @$nom = htmlspecialchars($_POST['nom']);
@@ -101,15 +101,13 @@ if (!empty($_POST)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="NoS1gnal" />
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link href="../css/style.css" rel="stylesheet" media="all"> 
 
     <title>Inscription</title>
 </head>
 
 <body>
-    <div class="login-form">
+    <div id="msform">
         <form action="" method="post">
             <h2 class="text-center">Inscription</h2>
 
@@ -167,7 +165,7 @@ if (!empty($_POST)) {
             </div>
 
             <div class="form-group">
-                <button type="submit" name="inscr" class="btn btn-primary btn-block">Inscription</button>
+                <button type="submit" name="inscr" class="btn" >Inscription</button>
             </div>
 
 
@@ -177,6 +175,6 @@ if (!empty($_POST)) {
 
 
 </body>
-<?php require_once '/xampp/htdocs/Extranet/component/php/footer.php'; ?>
+<?php require_once 'footer.php'; ?>
 
 </html>

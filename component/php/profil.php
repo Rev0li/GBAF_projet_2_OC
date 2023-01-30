@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'C:/xampp/htdocs/Extranet/component/php/config.php';
+require 'config.php';
 require_once 'crop_image.php';
 
 if (!isset($_SESSION['id'])) {
@@ -142,12 +142,12 @@ if (isset($_POST['modif_psw'])) {
     <link href="../css/style.css" rel="stylesheet" media="all"> 
     <title>Mon profil</title>
 </head>
-<?php require_once '/xampp/htdocs/Extranet/component/php/header.php'; ?>
+<?php require_once 'header.php'; ?>
 
 <body>
-    <div class="login-form">
+    <div id="msform">
         <form action="" method="post" enctype="multipart/form-data">
-            <h2 class="text-center">Mes Informations</h2>
+            <h2 >Mes Informations</h2>
             <div>
                 <label for="image">Image de profil :</label><br>
                 <img id="preview" src="<?= '../../component/image/profil_pict' . '/' . $_SESSION['id'] . '/' . $_SESSION['profil_pict'] ?>" alt="">
@@ -155,7 +155,7 @@ if (isset($_POST['modif_psw'])) {
                 <input type="file" name="profil_pict" value="Choisir un fichier">
             </div><br>
             <div class="form-group">
-                <button type="submit" name="modif_pict" class="btn btn-primary btn-block">Maj photo profil</button>
+                <button type="submit" name="modif_pict" class="btn">Maj photo profil</button>
             </div>
 
             <div class="empty_err">
@@ -166,41 +166,28 @@ if (isset($_POST['modif_psw'])) {
                 </ul>
             </div>
 
-            <div class="form-group">
-                <input type="text" name="nom" class="form-control" placeholder="Nom" autocomplete="off" value="<?= $_SESSION['nom']; ?>">
-            </div>
-            <div class="form-group">
-                <input type="text" name="prenom" class="form-control" placeholder="Prénom" autocomplete="off" value="<?= $_SESSION['prenom']; ?>">
-            </div>
-            <div class="form-group">
-                <input type="text" name="username" class="form-control" placeholder="Pseudo" autocomplete="off" value="<?= $_SESSION['username']; ?>">
-            </div>
-            <div class="form-group">
-                <input type="email" name="email" class="form-control" placeholder="Email" autocomplete="off" value="<?= $_SESSION['email']; ?>">
-            </div>
-            <div class="form-group">
-                <button type="submit" name="modif" class="btn btn-primary btn-block">Modifier vos Informations</button>
-            </div>
-
-
-            <div class="form-group">
-                <input type="password" name="old_password" class="form-control" placeholder="Mot de passe actuel" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <input type="password" name="new_password" class="form-control" placeholder="Nouveau mot de passe" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <input type="password" name="password_retype" class="form-control" placeholder="Confirmer le mot de passe" autocomplete="off">
-            </div>
-            <div class="form-group">
-                <button type="submit" name="modif_psw" class="btn btn-primary btn-block">Mettre a jour le mot de passe</button>
-            </div>
-
-        </form>
+            
+            <input type="text" name="nom"  placeholder="Nom" autocomplete="off" value="<?= $_SESSION['nom']; ?>">
+            
+            <input type="text" name="prenom"  placeholder="Prénom" autocomplete="off" value="<?= $_SESSION['prenom']; ?>">
+            
+            <input type="text" name="username"  placeholder="Pseudo" autocomplete="off" value="<?= $_SESSION['username']; ?>">
+            
+            <input type="email" name="email"  placeholder="Email" autocomplete="off" value="<?= $_SESSION['email']; ?>">
+            
+            <button type="submit" name="modif" class="btn">Modifier vos Informations</button>
+            
+            <input type="password" name="old_password"  placeholder="Mot de passe actuel" autocomplete="off">
+            
+            <input type="password" name="new_password"  placeholder="Nouveau mot de passe" autocomplete="off">
+            
+            <input type="password" name="password_retype"  placeholder="Confirmer le mot de passe" autocomplete="off">
+            <button type="submit" name="modif_psw" class="btn">Mettre a jour le mot de passe</button>
+            </form>
     </div>
 </body>
 <?php
-require_once '/xampp/htdocs/Extranet/component/php/footer.php';
+require_once 'footer.php';
 ?>
 
 </html>

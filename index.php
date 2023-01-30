@@ -1,7 +1,7 @@
 <?php
 session_start();
-require 'C:/xampp/htdocs/Extranet/component/php/config.php  ';
-require_once '/xampp/htdocs/Extranet/component/php/header.php';
+require 'component/php/config.php  ';
+require_once 'component/php/header.php';
 if (!empty($_SESSION['id'])) {
         header('Location: component/php/home.php ');
         exit;
@@ -95,15 +95,14 @@ elseif (isset($_POST["valide_new_mdp"])){
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="author" content="NoS1gnal" />
         <link href="component/css/style.css" rel="stylesheet" media="all"> 
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <title>Connexion</title>
 </head>
 
 <body>
-        <div class="login-form">
+        <div id="msform">
                 <form action="" method="post">
                         <h2 class="text-center">Connexion</h2>
                         <div class="empty_err">
@@ -120,7 +119,7 @@ elseif (isset($_POST["valide_new_mdp"])){
                                 <input type="password" name="password" class="form-controle" placeholder="Mot de passe" autocomplete="off">
                         </div>
                         <div class="form-group">
-                                <button type="submit" name="submit_connexion" class="btn btn-primary btn-block">Connexion</button>
+                                <button type="submit" name="submit_connexion" class="btn">Connexion</button>
                         </div>
                 </form>
 
@@ -211,5 +210,5 @@ if(sessionStorage.getItem("form_open") === "true") {
     });
 </script>
 </body>
-<?php require_once '/xampp/htdocs/Extranet/component/php/footer.php'; ?>
+<?php require_once 'component/php/footer.php'; ?>
 </html>

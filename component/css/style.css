@@ -1,8 +1,28 @@
 
+footer, header{
+    background-color: #dcdcdc;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.container_flex_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.case{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+h6 {
+font-size: medium;
+}
 
 
-
-/* header */
 .hdmid {
     display: flex;
     justify-content: center;
@@ -24,38 +44,52 @@
     border-radius: 50%;
 }
 
-
-/* ____________________ */
-
-
-/* Update_profile AND Index */
-.login-form {
-    width: 340px;
-    margin: 50px auto;
-}
-
-.login-form form {
-    margin-bottom: 15px;
+#msform {
+	width: 50%;
+	margin: 50px auto;
+	text-align: center;
+	position: relative;
     background: #f7f7f7;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     padding: 30px;
 }
 
-.login-form h2 {
-    margin: 0 0 15px;
+#msform input, #msform textarea, #secret_quest {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+    margin-top: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
 }
 
-.form-control,
 .btn {
-    min-height: 38px;
-    border-radius: 2px;
+    background: #3498db;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.btn {
+.new-com{
     font-size: 15px;
-    font-weight: bold;
 }
 
+.btn_deco {
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 10px;
+    background: #d93434;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+  }
 #preview {
     position: relative;
     max-width: 200px;
@@ -65,15 +99,14 @@
 #panneau-depliant{
     cursor: pointer;
     }
-/* ____________________ */
 
-/* Home */
 .truncate{
     overflow:hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    max-width: 550px;
 }
 .minia{
     max-height: 100px;
@@ -88,6 +121,53 @@
 
 }
 
-/* ____________________ */
+.card-partner{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    margin: 25px 0 25px 0;
+    border: solid #1f628d 2px;
+}
 
+.info{
+    margin-top: 25px;
+}
+
+ .partner_logo{
+    max-width: 90%;
+}
+
+.cont_likes_dislike {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 25px 25px 25px;
+    flex-flow: row wrap;
+    align-items: center;
+
+}
+
+.cont_right{
+    display: flex;
+}
+.new-com{
+margin:0 20px 0 20px;
+}
+.lk, .dslk{
+    display: flex;
+}
+
+.img_pouce {
+    max-width: 50px;
+}
+.area-com{
+    width: 90%;
+    min-height: 15vh;
+}
+
+.cont-post-com, .ind_com {
+    background: #dcdcdc!important;
+    padding: 15px;
+    border: 1px solid #ccc;
+}
 

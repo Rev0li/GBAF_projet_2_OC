@@ -6,17 +6,6 @@ require_once 'header.php';
 $partner = $bdd->query('SELECT * FROM partner ORDER BY ID DESC');
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../css/style.css" rel="stylesheet" media="all"> 
-   
-    <title>GBAF</title>
-</head>
 
 <body>
 <div class="container_flex_wrap ">
@@ -38,7 +27,7 @@ $partner = $bdd->query('SELECT * FROM partner ORDER BY ID DESC');
             
                         <!-- <h3><?= $p['partner_name'] ?></h3> -->
                         <div class="card-partner" >
-                    <img class="img-thumbnail minia" src="../image/miniature/<?= $p['id'] ?>.png" height="80">
+                    <img class="img-thumbnail minia" src="../image/miniature/<?= $p['id'] ?>.png" alt="miniature partner" height="80">
                     <p class="truncate"><?= $p['contenu'] ?></p>
                 <a class="btn" href="partner.php?id=<?= $p['id'] ?>"> Lire la suite</a>
                 </div>
@@ -49,7 +38,4 @@ $partner = $bdd->query('SELECT * FROM partner ORDER BY ID DESC');
     
 
 </div>
-</body>
-
 <?php require_once 'footer.php';?>
-</html>

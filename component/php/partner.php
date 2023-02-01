@@ -70,22 +70,12 @@ if (isset($_GET['id']) and !empty(['id'])) {
 }
 
 ?>
-<!DOCTYPE html>
-<html lang="fr">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://localhost/extranet/component/css/style.css" rel="stylesheet" media="all"> 
-
-    <title><?= $titre ?></title>
-</head>
 
 <body>
 <div class="container_flex_wrap">
     <div class="info">
-        <img class="partner_logo rounded mt-4 mb-3" src="../image/miniature/<?= $get_id ?>.png">
+        <img class="partner_logo rounded mt-4 mb-3" src="../image/miniature/<?= $get_id ?>.png" alt="logo partner">
         <h1><?= $titre ?></h1>
         <p><?= $contenu ?></p>
     </div>
@@ -103,9 +93,9 @@ if (isset($_GET['id']) and !empty(['id'])) {
 
                     <a href="dis_like.php?t=1&id=<?= $id ?>">
                         <?php if ($check_like->rowCount() == 0) { ?>
-                            <img class='img_pouce' src="../image/btn/pouce_up.png">
+                            <img class='img_pouce' src="../image/btn/pouce_up.png" alt="like">
                         <?php } else { ?>
-                            <img class='img_pouce' src="../image/btn/pouce_up_full.png">
+                            <img class='img_pouce' src="../image/btn/pouce_up_full.png" alt="like full">
                         <?php } ?>
                     </a>
                 </div>
@@ -116,9 +106,9 @@ if (isset($_GET['id']) and !empty(['id'])) {
                     <a href="dis_like.php?t=2&id=<?= $id ?>">
 
                         <?php if ($check_dislike->rowCount() == 0) { ?>
-                            <img class='img_pouce' src="../image/btn/pouce_down.png">
+                            <img class='img_pouce' src="../image/btn/pouce_down.png" alt="dislike">
                         <?php } else { ?>
-                            <img class='img_pouce' src="../image/btn/pouce_down_full.png">
+                            <img class='img_pouce' src="../image/btn/pouce_down_full.png" alt="dislike full">
                         <?php } ?>
                     </a>
                 </div>
@@ -153,19 +143,15 @@ if (isset($_GET['id']) and !empty(['id'])) {
         
     </div>
 </div>
-</body>
-<?php require_once 'footer.php';
-?>
-<style>
-   
-</style>
+
+
 <script>
   const btn = document.getElementById("btn-nouveau-commentaire");
   const form = document.getElementById("form-nouveau-commentaire");
-
+  
   btn.addEventListener("click", function() {
-    form.scrollIntoView();
-  });
+      form.scrollIntoView();
+    });
 </script>
 
-</html>
+<?php require_once 'footer.php';?>

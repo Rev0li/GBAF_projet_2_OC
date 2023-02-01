@@ -2,16 +2,7 @@
     require_once 'config.php  ';
     ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../css/style.css" rel="stylesheet" media="all">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <title>Footer</title>
-</head>
+
 
     <footer >
     
@@ -42,15 +33,15 @@
 
 
             <div class="container_flex_wrap" >
-        <section >
-            <div class="">
+        
+            
                 <div >
                     <p>
                     Extranet du groupe GBAF, le but est de permettre des échanges sécurisés à distance.
                     </p>
                 </div>
-            </div>
-        </section>
+            
+        
     
 
     <div class="">
@@ -59,4 +50,6 @@
     </div>
     </div>
     </footer>
+    </body>
+
 </html>

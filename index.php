@@ -87,23 +87,13 @@ elseif (isset($_POST["valide_new_mdp"])){
 
         ?>
 
-<!DOCTYPE html>
-<html lang="fr">
-
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="NoS1gnal" />
-        <link href="component/css/style.css" rel="stylesheet" media="all"> 
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <title>Connexion</title>
+        <link rel="stylesheet" href="component/css/style.css">
 </head>
 
 <body>
         <div id="msform">
-                <form action="" method="post">
+                <form  method="post">
                         <h2 class="text-center">Connexion</h2>
                         <div class="empty_err">
                                 <ul>
@@ -129,7 +119,7 @@ elseif (isset($_POST["valide_new_mdp"])){
                         <p id="panneau-depliant">Mot de passe oublié</p>
                         
                         <div class="form-group" id="controle_id_to_reset"  >
-                                <form id='formulaire_mdp_oublie' action="" method="post" style="display: <?php echo isset($_SESSION['form_open']) && $_SESSION['form_open'] == true ? 'block' : 'none'; ?>;">
+                                <form id='formulaire_mdp_oublie' method="post" style="display: <?php echo isset($_SESSION['form_open']) && $_SESSION['form_open'] == true ? 'block' : 'none'; ?>;">
                                         <div class="empty_err">
                                                 <ul>
                                                         <?php foreach ($erreur_recup as $r) : ?>
@@ -209,6 +199,5 @@ if(sessionStorage.getItem("form_open") === "true") {
     }
     });
 </script>
-</body>
+
 <?php require_once 'component/php/footer.php'; ?>
-</html>

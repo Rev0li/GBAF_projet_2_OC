@@ -93,22 +93,9 @@ if (!empty($_POST)) {
 
 
 
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="NoS1gnal" />
-
-    <link href="../css/style.css" rel="stylesheet" media="all"> 
-
-    <title>Inscription</title>
-</head>
-
 <body>
     <div id="msform">
-        <form action="" method="post">
+        <form method="post">
             <h2 class="text-center">Inscription</h2>
 
             <div class="empty_err">
@@ -174,7 +161,4 @@ if (!empty($_POST)) {
 
 
 
-</body>
-<?php require_once 'footer.php'; ?>
-
-</html>
+    <?php require_once 'footer.php'; ?>

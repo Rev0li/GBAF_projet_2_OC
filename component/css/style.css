@@ -45,7 +45,7 @@ font-size: medium;
 }
 
 #msform {
-	width: 50%;
+	width: 750px;
 	margin: 50px auto;
 	text-align: center;
 	position: relative;
@@ -130,6 +130,9 @@ font-size: medium;
     border: solid #1f628d 2px;
 }
 
+.container_partner{
+    width: 50%;
+}
 .info{
     margin-top: 25px;
 }
@@ -172,3 +175,23 @@ margin:0 20px 0 20px;
     border: 1px solid #ccc;
 }
 
+@media screen and (max-width: 1024px) and (min-width: 768px){
+    #msform {
+        width: 80%;
+        margin: 50px 10px 50px 10px;
+        padding: 0px 20px 0px 20px;
+    }
+    .container_partner{
+        width: 80%;
+    }
+}
+@media screen and (max-width: 767px){
+    #msform {
+        width: 80%;
+        margin: 50px 10px 50px 10px;
+        padding: 0px 20px 0px 20px;
+    }
+    .container_partner{
+        width: 80%;
+    }
+}
